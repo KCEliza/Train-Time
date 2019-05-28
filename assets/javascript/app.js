@@ -13,3 +13,4 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 $("#add-user").on("click", function (event) {
             event.preventDefault();
+})
