@@ -26,21 +26,40 @@ database.ref().on("child_added", function (snapshot) {
     var row = $("<tr>");
     var nameTD = $("<td>").text(snapshot.val().name);
     var destinationTD = $("<td>").text(snapshot.val().destination);
-    var tFrequency = $("#input-frequency").val().trim()
+    var frequency = $("<td>").text(snapshot.val().frequency + " minutes");
     var firstTime = $("#input-time").val().trim();
 
+    
+    // console.log(firstTimeConverted)
+    // var diffTime = moment().diff(moment(firstTimeConverted), "minutes")
+    // (randomMoment.diff(moment("02/14/2001", firstTimeConverted), "minutes"))
+    // console.log(diffTime);
+    firstTimeConverted = moment(firstTime, "HH:mm").format("hh:mm a");
+
+    var diffTime = moment().diff(moment(firstTimeConverted, "hh:mm a"), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // // Time apart (remainder)
+    // var remainder = diffTime % frequency;
+    // // console.log(remainder);
+
+    // // Minute Until Train
+    // var minutes = $("<td>").text(frequency - remainder);
+
+    // // Next Train
+    // var nextTrain = moment().add(minutes, "minutes");
+    // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
 
-    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-    var diffTime = $("<td>").text(moment().diff(moment(snapshot.val().firstTimeConverted), "minutes"));
-    var tRemainder = diffTime % tFrequency;
-    var tMinutesTillTrain = tFrequency - tRemainder;
-    var nextTrain = $("<td>").text(moment().add(snapshot.val().tMinutesTillTrain, "minutes"));
-    var timeTD = $("<td>").text(moment(snapshot.val().nextTrain).format("minutes"));
-
+//convert military time to normal time
+// firstTimeConverted = moment(firstTime, "HH:mm").format("hh:mm a");
+//find the difference in minutes before normal time and current time
+//find remainder of diffTime%frequency
+//subtract remainder from frequency
+//add leftover minutes to current time
     
 
   
-    row.append(nameTD, destinationTD, timeTD, nextTrain, diffTime);
+    row.append(nameTD, destinationTD, frequency);
     $("tbody").append(row);
 })
