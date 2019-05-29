@@ -27,39 +27,27 @@ database.ref().on("child_added", function (snapshot) {
     var nameTD = $("<td>").text(snapshot.val().name);
     var destinationTD = $("<td>").text(snapshot.val().destination);
     var frequency = $("<td>").text(snapshot.val().frequency + " minutes");
+    var tFrequency = snapshot.val().frequency;
     var firstTime = $("#input-time").val().trim();
 
-    
-    // console.log(firstTimeConverted)
-    // var diffTime = moment().diff(moment(firstTimeConverted), "minutes")
-    // (randomMoment.diff(moment("02/14/2001", firstTimeConverted), "minutes"))
-    // console.log(diffTime);
-    firstTimeConverted = moment(firstTime, "HH:mm").format("hh:mm a");
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
 
-    var diffTime = moment().diff(moment(firstTimeConverted, "hh:mm a"), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log(diffTime + "TIME DIFFERENCE");
 
-    // // Time apart (remainder)
-    // var remainder = diffTime % frequency;
-    // // console.log(remainder);
+    var tRemainder = diffTime % tFrequency;//do i maybe need specify the format of frequency
+    console.log(tRemainder + "remainder");
 
-    // // Minute Until Train
-    // var minutes = $("<td>").text(frequency - remainder);
+    // Minute Until Train
+    var tMinutesTillTrain = $("<td>").text(tFrequency - tRemainder);
+    console.log(tMinutesTillTrain + "minutes until train")
 
-    // // Next Train
-    // var nextTrain = moment().add(minutes, "minutes");
-    // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    // Next Train
+    var nextTrain = $("<td>").text(moment().add(tMinutesTillTrain, "minutes"));
+    var next = $("<td>").text(moment(nextTrain).format("hh:mm"));
+    console.log(next + "next train")
 
-
-//convert military time to normal time
-// firstTimeConverted = moment(firstTime, "HH:mm").format("hh:mm a");
-//find the difference in minutes before normal time and current time
-//find remainder of diffTime%frequency
-//subtract remainder from frequency
-//add leftover minutes to current time
-    
-
-  
-    row.append(nameTD, destinationTD, frequency);
+    //puts the text onto the page inside of each row created
+    row.append(nameTD, destinationTD, frequency, next, tMinutesTillTrain );
     $("tbody").append(row);
 })
