@@ -35,7 +35,7 @@ database.ref().on("child_added", function (snapshot) {
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
     console.log(diffTime + "TIME DIFFERENCE");
 
-    var tRemainder = diffTime % tFrequency;//do i maybe need specify the format of frequency
+    var tRemainder = diffTime % tFrequency;
     console.log(tRemainder + "remainder");
 
     // Minute Until Train
