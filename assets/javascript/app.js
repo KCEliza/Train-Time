@@ -13,13 +13,13 @@ var firebaseConfig = {
 var database = firebase.database();
 $(".btn").on("click", function (event) {
     event.preventDefault();
-
     database.ref().push({
         name: $("#input-name").val().trim(),
         destination: $("#input-destination").val().trim(),
         time: $("#input-time").val().trim(),
         frequency: $("#input-frequency").val().trim()
     })
+    
 });
 
 database.ref().on("child_added", function (snapshot) {
@@ -28,24 +28,24 @@ database.ref().on("child_added", function (snapshot) {
     var destinationTD = $("<td>").text(snapshot.val().destination);
     var frequency = $("<td>").text(snapshot.val().frequency + " minutes");
     var tFrequency = snapshot.val().frequency;
-    var firstTime = $("#input-time").val().trim();
+    var firstTime = $("<td>").text(snapshot.val().time);
 
-    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+   
+    var firstTimeConverted = moment(snapshot.val().time, "HH:mm").subtract(1, "years");
+
 
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log(diffTime + "TIME DIFFERENCE");
 
     var tRemainder = diffTime % tFrequency;
-    console.log(tRemainder + "remainder");
 
     // Minute Until Train
-    var tMinutesTillTrain = $("<td>").text(tFrequency - tRemainder);
-    console.log(tMinutesTillTrain + "minutes until train")
+    var Minutes = tFrequency-tRemainder
+    var tMinutesTillTrain = $("<td>").text(Minutes);
 
     // Next Train
-    var nextTrain = $("<td>").text(moment().add(tMinutesTillTrain, "minutes"));
+    var nextTrain = (moment().add(Minutes, "minutes"));
+
     var next = $("<td>").text(moment(nextTrain).format("hh:mm"));
-    console.log(next + "next train")
 
     //puts the text onto the page inside of each row created
     row.append(nameTD, destinationTD, frequency, next, tMinutesTillTrain );
